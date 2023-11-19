@@ -180,6 +180,7 @@ class Node {
 
     final int x;
     final int y;
+    int cost;
     Types type;
 
     public Node(int x, int y) {
@@ -203,7 +204,16 @@ class Node {
     public int getY() {
         return y;
     }
+    public int manhattanDistance(Node otherNode) {
+        return Math.abs(this.getX() - otherNode.getX()) + Math.abs(this.getY() - otherNode.getY());
+    }
+    public int getCost() {
+        return cost;
+    }
 
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
     public void draw(Graphics g) {
         // Set propely color
         switch (type) {

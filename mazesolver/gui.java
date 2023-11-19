@@ -197,6 +197,12 @@ class GUI extends JPanel implements MouseListener, MouseMotionListener {
                         repaint();
                     }
                     break;
+                case KeyEvent.VK_4:
+                    if (!running) {
+                        AlgorithmFactory.setID(4);
+                        repaint();
+                    }
+                    break;
                 // Adjusting speed of the algorithm
                 case KeyEvent.VK_RIGHT:
                 case KeyEvent.VK_UP:
@@ -307,19 +313,25 @@ class Menu {
             if (AlgorithmFactory.getID() == 1) {
                 g.setColor(new Color(42, 170, 42));
             }
-            g.drawString("[1]  BFS alghoritm", 765, 490);
+            g.drawString("[1]  BFS alghoritm", 765, 460);
 
             g.setColor(Color.WHITE);
             if (AlgorithmFactory.getID() == 2) {
                 g.setColor(new Color(42, 170, 42));
             }
-            g.drawString("[2]  DFS alghoritm", 765, 520);
+            g.drawString("[2]  DFS alghoritm", 765, 490);
 
             g.setColor(Color.WHITE);
             if (AlgorithmFactory.getID() == 3) {
                 g.setColor(new Color(42, 170, 42));
             }
-            g.drawString("[3]  A* alghoritm", 765, 550);
+            g.drawString("[3]  A* alghoritm", 765, 520);
+
+            g.setColor(Color.WHITE);
+            if (AlgorithmFactory.getID() == 4) {
+                g.setColor(new Color(42, 170, 42));
+            }
+            g.drawString("[4]  Best FS alghoritm", 765, 550);
         }
     }
 

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
+import java.util.Comparator;
 
 class AlgorithmFactory {
 
@@ -30,6 +31,8 @@ class AlgorithmFactory {
                 return new DFSAlgorithm();
             case 3:
                 return new AStarAlgorithm();
+            case 4:
+                return new BestFirstSearchAlgorithm();
             default:
                 return null;
         }
@@ -174,6 +177,70 @@ class BFSAlgorithm implements IAlgorithm {
                     solutionMap.put(chlid, state);
                     if (chlid != grid.getEnd() && chlid != grid.getStart()) {
                         chlid.setType(Node.Types.VISITED);
+                        worker.getGrid().repaint();
+                        Thread.sleep(Menu.getDelay());
+                    }
+                }
+            }
+        }
+        Utils.checkForAlerts(solutionFound, grid);
+    }
+}
+class BestFirstSearchAlgorithm implements IAlgorithm {
+
+    @Override
+    public void solve(IConnectWorker worker, Grid grid) throws InterruptedException {
+        boolean solutionFound = false;
+        Node start = grid.getStart();
+        Node end = grid.getEnd();
+        grid.clear();
+
+        PriorityQueue<Node> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(end::manhattanDistance));
+        Map<Node, Node> solutionMap = new LinkedHashMap<>();
+        priorityQueue.add(start);
+        solutionMap.put(start, null);
+
+        while (!priorityQueue.isEmpty()) {
+            if (!GUI.running) {
+                return;
+            }
+
+            Node currentState = priorityQueue.poll();
+
+            if (currentState == null) {
+                // currentState is not found in solutionMap
+                continue;
+            }
+
+            if (currentState.equals(end)) {
+                solutionFound = true;
+                Utils.checkForAlerts(solutionFound, grid);
+                Utils.showSolution(solutionMap, grid);
+                worker.stopRunning();
+                return;
+            }
+
+            List<Node> neighbors = grid.getNeighbors(currentState.getX(), currentState.getY());
+            for (Node neighbor : neighbors) {
+                if (worker.workerStopped()) {
+                    return;
+                }
+                int newCost = 0;
+
+                Node currentStateValue = solutionMap.get(currentState);
+                if (currentStateValue != null) {
+                    newCost = currentStateValue.getCost() + 1; // Assuming uniform cost
+                }
+
+                int finalNewCost = newCost;
+
+                if (!solutionMap.containsKey(neighbor) || finalNewCost < neighbor.getCost()) {
+                    neighbor.setCost(finalNewCost);
+                    priorityQueue.add(neighbor);
+                    solutionMap.put(neighbor, currentState);
+
+                    if (neighbor != end && neighbor != start) {
+                        neighbor.setType(Node.Types.VISITED);
                         worker.getGrid().repaint();
                         Thread.sleep(Menu.getDelay());
                     }

@@ -331,7 +331,7 @@ class Menu {
             if (AlgorithmFactory.getID() == 4) {
                 g.setColor(new Color(42, 170, 42));
             }
-            g.drawString("[4]  Best FS alghoritm", 765, 550);
+            g.drawString("[4]  Best FS ", 765, 550);
         }
     }
 
